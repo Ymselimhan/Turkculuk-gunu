@@ -1,0 +1,64 @@
+import turtle as tu
+import re
+import docx  # pip install python-docx
+
+# 🔧 .docx dosyasının tam yolu:
+# İstersen kendi yolunu buraya yazabilirsin
+source_path = r"C:\Users\ymsel\Desktop\python\3mayıs\ganesh.docx"
+
+# Belgeden verileri oku
+data = docx.Document(source_path)
+coordinates = []
+colours = []
+
+for i in data.paragraphs:
+    try:
+        # (x, y) koordinatlarını çek
+        coord_stg_tup = re.findall(r'\([-+]?\d*\.\d*(?:[eE][-+]?\d+)? ?\, ?[-+]?\d*\.\d*(?:[eE][-+]?\d+)?\)', i.text)
+        coord_num_tup = []
+
+        # (r, g, b) renklerini çek
+        color_stg_tup = re.findall(r'\([-+]?\d*\.\d*(?:[eE][-+]?\d+)? ?\, ?[-+]?\d*\.\d*(?:[eE][-+]?\d+)? ?\, ?[-+]?\d*\.\d*(?:[eE][-+]?\d+)?\)', i.text)
+        color_val = re.findall(r'[-+]?\d*\.\d*', color_stg_tup[0])
+        color_val_lst = [float(k) for k in color_val]
+        colours.append(tuple(color_val_lst))
+
+        # Her koordinatı dönüştür
+        for j in coord_stg_tup:
+            coord_pos = re.findall(r'[-+]?\d*\.\d*', j)
+            coord_num_lst = [float(k) for k in coord_pos]
+            coord_num_tup.append(tuple(coord_num_lst))
+
+        coordinates.append(coord_num_tup)
+    except:
+        pass  # Hatalı paragraflar atlanır
+
+# Turtle kurulumu
+pen = tu.Turtle()
+screen = tu.Screen()
+tu.tracer(2)
+pen.speed(0)
+pen.hideturtle()
+screen.getcanvas().winfo_toplevel().attributes("-fullscreen", True)
+
+# Çizim işlemi
+for i in range(len(coordinates)):
+    draw = True
+    path = coordinates[i]
+    col = colours[i]
+    pen.color(col)
+    pen.begin_fill()
+    for order_pair in path:
+        x, y = order_pair
+        y = -1 * y  # Y koordinatını ters çevir
+        if draw:
+            pen.up()
+            pen.goto(x, y)
+            pen.down()
+            draw = False
+        else:
+            pen.goto(x, y)
+    pen.end_fill()
+
+# Ekranı açık tut
+screen.mainloop()

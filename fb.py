@@ -2,7 +2,7 @@ import turtle
 import re
 import docx  # pip install python-docx
 
-# 📄 .docx dosyasının tam yolu siz bunu kendinize göre düzenleyin.
+# 📄 .docx dosyasının tam yolu
 source_path = r"C:\Users\ymsel\Desktop\python\3mayıs\ganesh.docx"
 
 # 🔧 Ölçekleme ve pozisyon ayarı
@@ -82,7 +82,7 @@ gokturk_pen.penup()
 gokturk_pen.goto(-130, -200)
 
 for harf in gokturk_harfleri:
-    gokturk_pen.write(harf, font=("Times New Roman", 50, "normal"))
+    gokturk_pen.write(harf, font=("Arial", 50, "normal"))
     gokturk_pen.forward(60)
 
 # Ekranı açık tut
